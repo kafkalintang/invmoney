@@ -3,25 +3,25 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  MdDashboard,
-  MdShowChart,
-  MdMonetizationOn,
-  MdAccountBalance,
-  MdSavings,
-  MdBarChart,
-  MdAccountBalanceWallet,
-  MdNote,
-} from 'react-icons/md';
+  LayoutDashboard,
+  TrendingUp,
+  Coins,
+  Landmark,
+  PiggyBank,
+  BarChart3,
+  Wallet,
+  StickyNote,
+} from 'lucide-react';
 
 const menu = [
-  { label: 'Dashboard',   href: '/',           icon: MdDashboard },
-  { label: 'Saham',       href: '/saham',      icon: MdShowChart },
-  { label: 'Emas',        href: '/emas',       icon: MdMonetizationOn },
-  { label: 'Reksa Dana',  href: '/reksadana',  icon: MdAccountBalance },
-  { label: 'Tabungan',    href: '/tabungan',   icon: MdSavings },
-  { label: 'Laporan',     href: '/laporan',    icon: MdBarChart },
-  { label: 'Multi-bank',  href: '/multibank',  icon: MdAccountBalanceWallet },
-  { label: 'Catatan',     href: '/catatan',    icon: MdNote },
+  { label: 'Dashboard',   href: '/',           icon: LayoutDashboard },
+  { label: 'Saham',       href: '/saham',      icon: TrendingUp },
+  { label: 'Emas',        href: '/emas',       icon: Coins },
+  { label: 'Reksa Dana',  href: '/reksadana',  icon: Landmark },
+  { label: 'Tabungan',    href: '/tabungan',   icon: PiggyBank },
+  { label: 'Laporan',     href: '/laporan',    icon: BarChart3 },
+  { label: 'Multi-bank',  href: '/multibank',  icon: Wallet },
+  { label: 'Catatan',     href: '/catatan',    icon: StickyNote },
 ];
 
 export default function Sidebar() {
