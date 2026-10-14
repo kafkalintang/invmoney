@@ -1,8 +1,80 @@
 'use client';
 
 import { useState } from 'react';
-import { LayoutDashboard } from 'lucide-react';
+import {
+  LayoutDashboard,
+  ShoppingCart,
+  Coins,
+  Save,
+  Tag,
+  Building2,
+  Layers,
+  Banknote,
+  Wallet,
+  CalendarDays,
+  StickyNote,
+  TrendingUp,
+  TrendingDown,
+  Inbox,
+  LineChart,
+  Receipt,
+  PiggyBank,
+} from 'lucide-react';
 
+/* ============================================================ */
+/* Hook: efek miring 3D halus mengikuti kursor                   */
+/* ============================================================ */
+function useTilt(max = 8, lift = 10) {
+  const [t, setT] = useState({ rx: 0, ry: 0, x: 50, y: 50, on: false });
+
+  const onMouseMove = (e) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const px = (e.clientX - r.left) / r.width;
+    const py = (e.clientY - r.top) / r.height;
+    setT({ rx: (0.5 - py) * max * 2, ry: (px - 0.5) * max * 2, x: px * 100, y: py * 100, on: true });
+  };
+  const onMouseLeave = () => setT((p) => ({ ...p, rx: 0, ry: 0, on: false }));
+
+  const style = {
+    transform: `perspective(900px) rotateX(${t.rx}deg) rotateY(${t.ry}deg) translateZ(${t.on ? lift : 0}px)`,
+    transition: t.on ? 'transform 80ms linear' : 'transform 450ms cubic-bezier(.2,.8,.2,1)',
+    transformStyle: 'preserve-3d',
+  };
+  const glare = {
+    background: `radial-gradient(circle at ${t.x}% ${t.y}%, rgba(255,255,255,.55), transparent 55%)`,
+    opacity: t.on ? 1 : 0,
+    transition: 'opacity 300ms',
+  };
+
+  return { handlers: { onMouseMove, onMouseLeave }, style, glare };
+}
+
+/* ============================================================ */
+/* Konfigurasi kolom form                                        */
+/* ============================================================ */
+const kolomBeli = [
+  { label: 'Nama Saham (kode)',     key: 'kode',    ikon: Tag },
+  { label: 'Nama Emiten',           key: 'emiten',  ikon: Building2 },
+  { label: 'Jumlah Lot',            key: 'lot',     ikon: Layers },
+  { label: 'Harga Beli per Lembar', key: 'harga',   ikon: Banknote },
+  { label: 'Total Investasi',       key: 'total',   ikon: Wallet },
+  { label: 'Tanggal',               key: 'tanggal', ikon: CalendarDays, tipe: 'date' },
+  { label: 'Catatan',               key: 'catatan', ikon: StickyNote },
+];
+
+const kolomJual = [
+  { label: 'Kode Saham',            key: 'kode',       ikon: Tag },
+  { label: 'Jumlah Lot Dijual',     key: 'lot',        ikon: Layers },
+  { label: 'Harga Jual per Lembar', key: 'harga',      ikon: Banknote },
+  { label: 'Total Hasil',           key: 'total',      ikon: Wallet },
+  { label: 'Keuntungan',            key: 'keuntungan', ikon: TrendingUp },
+  { label: 'Tanggal',               key: 'tanggal',    ikon: CalendarDays, tipe: 'date' },
+  { label: 'Catatan',               key: 'catatan',    ikon: StickyNote },
+];
+
+/* ============================================================ */
+/* Halaman utama                                                 */
+/* ============================================================ */
 export default function HalamanSaham() {
   // State kosong dulu — nanti kita isi logic
   const [formBeli, setFormBeli] = useState({
@@ -13,168 +85,277 @@ export default function HalamanSaham() {
   });
 
   return (
-    <div>
+    <div className="rounded-2xl p-5 sm:p-7 bg-gradient-to-br from-sky-50 via-indigo-50 to-rose-50">
+      <style>{`
+        .btn-3d { transition: transform 120ms ease, box-shadow 120ms ease; }
+        .btn-3d:hover { transform: translateY(-1px); }
+        .btn-3d:active { transform: translateY(4px); box-shadow: 0 1px 0 var(--sisi), 0 4px 8px -4px var(--bayang) !important; }
+        @media (prefers-reduced-motion: reduce) {
+          .tilt-3d, .btn-3d { transform: none !important; transition: none !important; }
+        }
+      `}</style>
+
       {/* Judul */}
-      <h2 className="text-xl font-bold text-blue-900 mb-5 flex items-center gap-2">
-        <LayoutDashboard size={24} />
-        Dashboard Tata Kelola Saham
-      </h2>
+      <div className="flex items-center gap-3 mb-7">
+        <div
+          className="grid place-items-center w-12 h-12 rounded-xl text-white bg-gradient-to-br from-sky-400 to-indigo-400"
+          style={{
+            boxShadow:
+              'inset 0 1px 0 rgba(255,255,255,.6), 0 5px 0 #818cf8, 0 12px 20px -6px rgba(99,102,241,.45)',
+            transform: 'translateY(-3px)',
+          }}
+        >
+          <LayoutDashboard size={24} />
+        </div>
+        <h2 className="text-2xl font-extrabold text-indigo-900 tracking-tight">
+          Dashboard Tata Kelola Saham
+        </h2>
+      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* ================= KOLOM KIRI ================= */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
+          <PanelForm
+            judul="Form Beli Saham"
+            ikon={ShoppingCart}
+            kolom={kolomBeli}
+            nilai={formBeli}
+            setNilai={setFormBeli}
+            nada={{
+              ikonBg: 'from-sky-200 to-blue-300',
+              ikonWarna: 'text-blue-700',
+              judul: 'text-blue-800',
+              fokus: 'focus-within:ring-sky-300',
+              tombol: 'from-sky-400 to-blue-500',
+              sisi: '#60a5fa',
+              bayang: 'rgba(59,130,246,.45)',
+              ikonInput: 'text-sky-500',
+            }}
+          />
 
-          {/* ===== Form Beli Saham ===== */}
-          <div className="bg-white rounded-lg shadow p-5">
-            <h3 className="font-bold text-blue-900 mb-4">Form Beli Saham</h3>
-
-            {[
-              { label: 'Nama Saham (kode)', key: 'kode' },
-              { label: 'Nama Emiten',       key: 'emiten' },
-              { label: 'Jumlah Lot',        key: 'lot' },
-              { label: 'Harga Beli per Lembar', key: 'harga' },
-              { label: 'Total Investasi',   key: 'total' },
-              { label: 'Tanggal',           key: 'tanggal' },
-              { label: 'Catatan',           key: 'catatan' },
-            ].map((f) => (
-              <div key={f.key} className="mb-3">
-                <label className="block text-xs font-semibold mb-1">{f.label}</label>
-                <input
-                  type="text"
-                  value={formBeli[f.key]}
-                  onChange={(e) => setFormBeli({ ...formBeli, [f.key]: e.target.value })}
-                  className="w-full bg-gray-200 rounded-full px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            ))}
-
-            <div className="flex justify-end mt-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-full">
-                Simpan
-              </button>
-            </div>
-          </div>
-
-          {/* ===== Form Jual Saham ===== */}
-          <div className="bg-white rounded-lg shadow p-5">
-            <h3 className="font-bold text-blue-900 mb-4">Form Jual Saham</h3>
-
-            {[
-              { label: 'Kode Saham',           key: 'kode' },
-              { label: 'Jumlah Lot Dijual',    key: 'lot' },
-              { label: 'Harga Jual per Lembar', key: 'harga' },
-              { label: 'Total Hasil',          key: 'total' },
-              { label: 'Keuntungan',           key: 'keuntungan' },
-              { label: 'Tanggal',              key: 'tanggal' },
-              { label: 'Catatan',              key: 'catatan' },
-            ].map((f) => (
-              <div key={f.key} className="mb-3">
-                <label className="block text-xs font-semibold mb-1">{f.label}</label>
-                <input
-                  type="text"
-                  value={formJual[f.key]}
-                  onChange={(e) => setFormJual({ ...formJual, [f.key]: e.target.value })}
-                  className="w-full bg-gray-200 rounded-full px-4 py-2 text-sm outline-none focus:ring-2 focus:ring-blue-500"
-                />
-              </div>
-            ))}
-
-            <div className="flex justify-end mt-4">
-              <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-8 py-2 rounded-full">
-                Simpan
-              </button>
-            </div>
-          </div>
-
+          <PanelForm
+            judul="Form Jual Saham"
+            ikon={Coins}
+            kolom={kolomJual}
+            nilai={formJual}
+            setNilai={setFormJual}
+            nada={{
+              ikonBg: 'from-orange-200 to-rose-300',
+              ikonWarna: 'text-rose-700',
+              judul: 'text-rose-800',
+              fokus: 'focus-within:ring-rose-300',
+              tombol: 'from-orange-300 to-rose-400',
+              sisi: '#fb7185',
+              bayang: 'rgba(244,63,94,.4)',
+              ikonInput: 'text-rose-400',
+            }}
+          />
         </div>
 
         {/* ================= KOLOM KANAN ================= */}
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-6">
+          <Panel>
+            <JudulPanel ikon={Receipt} teks="Data Pembelian Saham" />
+            <TabelData
+              kolom={['No', 'Waktu', 'Kode Saham', 'Lot', 'Lembar', 'Harga Beli', 'Emiten', 'Total Investasi']}
+            />
+            <p className="text-xs text-slate-500 mt-3">Total Investasi Saham: -</p>
+          </Panel>
 
-          {/* ===== Tabel Pembelian ===== */}
-          <div className="bg-white rounded-lg shadow p-5">
-            <h3 className="font-bold text-gray-700 mb-3">Data Pembelian Saham</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-1">No</th>
-                    <th className="border p-1">Waktu</th>
-                    <th className="border p-1">Kode Saham</th>
-                    <th className="border p-1">Lot</th>
-                    <th className="border p-1">Lembar</th>
-                    <th className="border p-1">Harga Beli</th>
-                    <th className="border p-1">Emiten</th>
-                    <th className="border p-1">Total Investasi</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colSpan={8} className="text-center text-gray-400 py-4 italic">
-                      Belum ada data
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">Total Investasi Saham: -</p>
-          </div>
-
-          {/* ===== Tabel Pengeluaran ===== */}
-          <div className="bg-white rounded-lg shadow p-5">
-            <h3 className="font-bold text-gray-700 mb-3">Data Pengeluaran Hari Ini</h3>
-            <div className="overflow-x-auto">
-              <table className="w-full text-xs border-collapse">
-                <thead>
-                  <tr className="bg-gray-100">
-                    <th className="border p-1">No</th>
-                    <th className="border p-1">Waktu</th>
-                    <th className="border p-1">Kode</th>
-                    <th className="border p-1">Emiten</th>
-                    <th className="border p-1">Lot</th>
-                    <th className="border p-1">Lembar</th>
-                    <th className="border p-1">Harga Jual/Lembar</th>
-                    <th className="border p-1">Total Hasil</th>
-                    <th className="border p-1">Keuntungan</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td colSpan={9} className="text-center text-gray-400 py-4 italic">
-                      Belum ada data
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <p className="text-xs text-gray-500 mt-2">Total Penjualan: - | Total Keuntungan: -</p>
-          </div>
+          <Panel>
+            <JudulPanel ikon={Receipt} teks="Data Penjualan Hari Ini" />
+            <TabelData
+              kolom={['No', 'Waktu', 'Kode', 'Emiten', 'Lot', 'Lembar', 'Harga Jual/Lembar', 'Total Hasil', 'Keuntungan']}
+            />
+            <p className="text-xs text-slate-500 mt-3">Total Penjualan: - | Total Keuntungan: -</p>
+          </Panel>
 
           {/* ===== Kartu Ringkas ===== */}
-          <div className="flex flex-col gap-3">
-            <div className="bg-cyan-400 text-white rounded-md p-3">
-              <p className="font-semibold text-sm">Rp -</p>
-              <p className="text-xs opacity-90">Pemasukan Hari Ini</p>
-            </div>
-            <div className="bg-orange-400 text-white rounded-md p-3">
-              <p className="font-semibold text-sm">Rp -</p>
-              <p className="text-xs opacity-90">Pengeluaran Hari Ini</p>
-            </div>
-            <div className="bg-gray-400 text-white rounded-md p-3">
-              <p className="font-semibold text-sm">Rp -</p>
-              <p className="text-xs opacity-90">Total Pendapatan Hari Ini</p>
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <KartuRingkas
+              label="Pemasukan Hari Ini"
+              ikon={TrendingUp}
+              warna="from-sky-100 to-sky-300"
+              teks="text-sky-900"
+              glow="56,189,248"
+            />
+            <KartuRingkas
+              label="Pengeluaran Hari Ini"
+              ikon={TrendingDown}
+              warna="from-orange-100 to-orange-300"
+              teks="text-orange-900"
+              glow="251,146,60"
+            />
+            <KartuRingkas
+              label="Total Pendapatan Hari Ini"
+              ikon={PiggyBank}
+              warna="from-violet-100 to-violet-300"
+              teks="text-violet-900"
+              glow="167,139,250"
+            />
           </div>
 
           {/* ===== Grafik Saham ===== */}
-          <div className="bg-white rounded-lg shadow p-5">
-            <h3 className="text-gray-500 text-right mb-2">Grafik Saham : -</h3>
-            <div className="h-48 flex items-center justify-center text-gray-400 italic text-sm">
+          <Panel>
+            <div className="flex items-center justify-between mb-3">
+              <JudulPanel ikon={LineChart} teks="Grafik Saham" tanpaMargin />
+              <span className="text-sm text-slate-500">Kode: -</span>
+            </div>
+            <div className="h-48 rounded-xl border-2 border-dashed border-indigo-200 bg-indigo-50/60 flex flex-col items-center justify-center gap-2 text-indigo-400 text-sm">
+              <LineChart size={32} />
               Grafik akan tampil di sini
             </div>
-          </div>
-
+          </Panel>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================================================ */
+/* Komponen: Panel timbul (pembungkus umum)                      */
+/* ============================================================ */
+function Panel({ children }) {
+  return (
+    <div
+      className="rounded-2xl bg-white/90 p-5 border border-white"
+      style={{
+        boxShadow:
+          'inset 0 1px 0 #fff, 0 6px 0 -2px rgba(165,180,252,.45), 0 22px 36px -16px rgba(99,102,241,.35)',
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+function JudulPanel({ ikon: Ikon, teks, tanpaMargin = false }) {
+  return (
+    <h3 className={`flex items-center gap-2 font-bold text-indigo-800 ${tanpaMargin ? '' : 'mb-3'}`}>
+      <Ikon size={18} className="text-indigo-400" />
+      {teks}
+    </h3>
+  );
+}
+
+/* ============================================================ */
+/* Komponen: Form (dipakai untuk beli & jual)                    */
+/* ============================================================ */
+function PanelForm({ judul, ikon: Ikon, kolom, nilai, setNilai, nada }) {
+  return (
+    <Panel>
+      <div className="flex items-center gap-3 mb-5">
+        <div
+          className={`grid place-items-center w-10 h-10 rounded-xl bg-gradient-to-br ${nada.ikonBg} ${nada.ikonWarna}`}
+          style={{ boxShadow: 'inset 0 1px 0 rgba(255,255,255,.7), 0 3px 8px -2px rgba(99,102,241,.35)' }}
+        >
+          <Ikon size={20} />
+        </div>
+        <h3 className={`font-bold ${nada.judul}`}>{judul}</h3>
+      </div>
+
+      {kolom.map((f) => {
+        const IkonField = f.ikon;
+        return (
+          <div key={f.key} className="mb-3">
+            <label className="block text-xs font-semibold text-slate-600 mb-1 ml-1">{f.label}</label>
+            <div
+              className={`flex items-center gap-2 rounded-full px-4 bg-indigo-50 ring-2 ring-transparent transition ${nada.fokus}`}
+              style={{ boxShadow: 'inset 0 2px 4px rgba(129,140,248,.18)' }}
+            >
+              <IkonField size={16} className={nada.ikonInput} />
+              <input
+                type={f.tipe || 'text'}
+                value={nilai[f.key]}
+                onChange={(e) => setNilai({ ...nilai, [f.key]: e.target.value })}
+                className="w-full bg-transparent py-2 text-sm text-slate-700 outline-none"
+              />
+            </div>
+          </div>
+        );
+      })}
+
+      <div className="flex justify-end mt-5">
+        <button
+          type="button"
+          className={`btn-3d inline-flex items-center gap-2 bg-gradient-to-br ${nada.tombol} text-white font-semibold px-8 py-2 rounded-full`}
+          style={{
+            '--sisi': nada.sisi,
+            '--bayang': nada.bayang,
+            boxShadow: `inset 0 1px 0 rgba(255,255,255,.5), 0 5px 0 ${nada.sisi}, 0 12px 18px -6px ${nada.bayang}`,
+          }}
+        >
+          <Save size={16} />
+          Simpan
+        </button>
+      </div>
+    </Panel>
+  );
+}
+
+/* ============================================================ */
+/* Komponen: Tabel                                               */
+/* ============================================================ */
+function TabelData({ kolom }) {
+  return (
+    <div className="overflow-x-auto rounded-xl border border-indigo-100">
+      <table className="w-full text-xs border-collapse">
+        <thead>
+          <tr className="bg-gradient-to-b from-indigo-50 to-sky-100 text-indigo-800">
+            {kolom.map((k) => (
+              <th key={k} className="p-2 font-semibold text-left whitespace-nowrap">
+                {k}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td colSpan={kolom.length} className="py-6">
+              <div className="flex flex-col items-center gap-1 text-indigo-300 italic">
+                <Inbox size={24} />
+                Belum ada data
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+/* ============================================================ */
+/* Komponen: Kartu Ringkas 3D lembut                             */
+/* ============================================================ */
+function KartuRingkas({ label, ikon: Ikon, warna, teks, glow }) {
+  const { handlers, style, glare } = useTilt(8, 12);
+
+  return (
+    <div style={{ perspective: 900 }}>
+      <div
+        {...handlers}
+        style={{
+          ...style,
+          boxShadow: `inset 0 1px 0 rgba(255,255,255,.8), 0 6px 0 -2px rgba(${glow},.55), 0 20px 26px -12px rgba(${glow},.65)`,
+        }}
+        className={`tilt-3d relative overflow-hidden rounded-xl p-4 bg-gradient-to-br ${warna} ${teks}`}
+      >
+        <span className="absolute -right-5 -top-7 w-24 h-24 rounded-full bg-white/30" />
+
+        <div className="relative flex items-center justify-between gap-3">
+          <div style={{ transform: 'translateZ(24px)' }}>
+            <p className="font-extrabold text-lg">Rp -</p>
+            <p className="text-xs mt-1 opacity-80">{label}</p>
+          </div>
+          <div
+            style={{ transform: 'translateZ(40px)' }}
+            className="grid place-items-center w-10 h-10 rounded-full bg-white/60 shrink-0"
+          >
+            <Ikon size={20} />
+          </div>
+        </div>
+
+        <div className="pointer-events-none absolute inset-0" style={glare} />
       </div>
     </div>
   );
