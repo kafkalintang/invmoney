@@ -7,7 +7,6 @@ import {
   TrendingDown,
   Coins,
   Landmark,
-  PiggyBank,
   Wallet,
   FileText,
   FileSpreadsheet,
@@ -113,7 +112,7 @@ export default function HalamanLaporan() {
             />
             <KartuAset
               judul="Tabungan"
-              ikon={PiggyBank}
+              ikon={Wallet}
               bg="from-emerald-100 via-teal-100 to-cyan-200"
               teks="text-emerald-900"
               glow="52,211,153"
@@ -137,7 +136,7 @@ export default function HalamanLaporan() {
                 <p className="flex items-center gap-2"><Coins size={14} className="text-amber-500" /> Emas &nbsp;&nbsp;&nbsp;&nbsp;: -</p>
                 <p className="flex items-center gap-2"><TrendingUp size={14} className="text-sky-500" /> Saham &nbsp;&nbsp;&nbsp;: -</p>
                 <p className="flex items-center gap-2"><Landmark size={14} className="text-purple-500" /> Reksa &nbsp;&nbsp;&nbsp;: -</p>
-                <p className="flex items-center gap-2"><PiggyBank size={14} className="text-emerald-500" /> Tabungan : -</p>
+                <p className="flex items-center gap-2"><Wallet size={14} className="text-emerald-500" /> Tabungan : -</p>
               </div>
 
               <button
