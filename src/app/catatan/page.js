@@ -10,7 +10,7 @@ import {
   Coins,
   TrendingUp,
   Landmark,
-  PiggyBank,
+  CircleDollarSign,
   Inbox,
   Clock,
   CalendarDays,
@@ -97,10 +97,10 @@ export default function HalamanCatatan() {
           {/* 4 kartu kategori */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-6">
             {[
-              { key: 'emas',      label: 'CATATAN EMAS',       icon: Coins,     grad: 'from-amber-100 to-yellow-200',   border: 'border-amber-200',   teks: 'text-amber-800',   ikon: 'text-amber-600'   },
-              { key: 'saham',     label: 'CATATAN SAHAM',      icon: TrendingUp, grad: 'from-sky-100 to-blue-200',      border: 'border-sky-200',     teks: 'text-sky-800',     ikon: 'text-sky-600'     },
-              { key: 'reksadana', label: 'CATATAN REKSA DANA', icon: Landmark,  grad: 'from-purple-100 to-fuchsia-200', border: 'border-purple-200', teks: 'text-purple-800',  ikon: 'text-purple-600'  },
-              { key: 'tabungan',  label: 'CATATAN TABUNGAN',   icon: PiggyBank, grad: 'from-emerald-100 to-teal-200',  border: 'border-emerald-200', teks: 'text-emerald-800', ikon: 'text-emerald-600' },
+              { key: 'emas',      label: 'CATATAN EMAS',       icon: Coins,             grad: 'from-amber-100 to-yellow-200',   border: 'border-amber-200',   teks: 'text-amber-800',   ikon: 'text-amber-600'   },
+              { key: 'saham',     label: 'CATATAN SAHAM',      icon: TrendingUp,        grad: 'from-sky-100 to-blue-200',      border: 'border-sky-200',     teks: 'text-sky-800',     ikon: 'text-sky-600'     },
+              { key: 'reksadana', label: 'CATATAN REKSA DANA', icon: Landmark,          grad: 'from-purple-100 to-fuchsia-200', border: 'border-purple-200', teks: 'text-purple-800',  ikon: 'text-purple-600'  },
+              { key: 'tabungan',  label: 'CATATAN TABUNGAN',   icon: CircleDollarSign,  grad: 'from-emerald-100 to-teal-200',  border: 'border-emerald-200', teks: 'text-emerald-800', ikon: 'text-emerald-600' },
             ].map(({ key, label, icon: Icon, grad, border, teks, ikon }) => (
               <KartuKategori
                 key={key}
@@ -162,10 +162,10 @@ export default function HalamanCatatan() {
 
               <div className="space-y-3">
                 {[
-                  { ikon: Coins,      warna: 'text-amber-500',   bg: 'bg-amber-50',   judul: 'Catatan Emas',      sub: 'Belum ada aktivitas' },
-                  { ikon: TrendingUp, warna: 'text-sky-500',     bg: 'bg-sky-50',     judul: 'Catatan Saham',     sub: 'Belum ada aktivitas' },
-                  { ikon: Landmark,   warna: 'text-purple-500',  bg: 'bg-purple-50',  judul: 'Catatan Reksa Dana', sub: 'Belum ada aktivitas' },
-                  { ikon: PiggyBank,  warna: 'text-emerald-500', bg: 'bg-emerald-50', judul: 'Catatan Tabungan',  sub: 'Belum ada aktivitas' },
+                  { ikon: Coins,            warna: 'text-amber-500',   bg: 'bg-amber-50',   judul: 'Catatan Emas',        sub: 'Belum ada aktivitas' },
+                  { ikon: TrendingUp,       warna: 'text-sky-500',     bg: 'bg-sky-50',     judul: 'Catatan Saham',       sub: 'Belum ada aktivitas' },
+                  { ikon: Landmark,         warna: 'text-purple-500',  bg: 'bg-purple-50',  judul: 'Catatan Reksa Dana',  sub: 'Belum ada aktivitas' },
+                  { ikon: CircleDollarSign, warna: 'text-emerald-500', bg: 'bg-emerald-50', judul: 'Catatan Tabungan',    sub: 'Belum ada aktivitas' },
                 ].map((a, i) => (
                   <div key={i} className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition">
                     <div className={`grid place-items-center w-10 h-10 rounded-xl ${a.bg}`}>

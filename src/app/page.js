@@ -1,7 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { LayoutDashboard, TrendingUp, TrendingDown, Wallet } from 'lucide-react';
+import {
+  LayoutDashboard,
+  TrendingUp,
+  TrendingDown,
+  Wallet,
+  Receipt,
+  Coins,
+  Landmark,
+  CircleDollarSign,
+  Target,
+  ArrowRight,
+  Plus,
+  PiggyBank,
+  ArrowUpRight,
+  ArrowDownRight,
+  Inbox,
+  Sparkles,
+  ChevronRight,
+  CalendarDays,
+} from 'lucide-react';
 import {
   BarChart,
   Bar,
@@ -54,7 +73,6 @@ export default function Dashboard() {
 
       {/* ===== Header: judul + jam real-time ===== */}
       <div className="flex flex-wrap items-center justify-between gap-4 mb-7">
-        {/* Kiri: ikon + judul */}
         <div className="flex items-center gap-3">
           <div
             className="grid place-items-center w-12 h-12 rounded-xl text-white bg-gradient-to-br from-blue-400 to-blue-700"
@@ -71,7 +89,6 @@ export default function Dashboard() {
           </h2>
         </div>
 
-        {/* Kanan: jam real-time */}
         <JamRealtime />
       </div>
 
@@ -91,7 +108,7 @@ export default function Dashboard() {
       </div>
 
       {/* ====== Grafik + Kalender ====== */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
         <PanelTilt className="lg:col-span-2" tepi="from-blue-400 to-indigo-600">
           <div className="p-5">
             <h3 className="font-bold text-blue-950 mb-3">Arus kas 7 hari terakhir</h3>
@@ -102,6 +119,172 @@ export default function Dashboard() {
         <PanelTilt tepi="from-blue-800 to-blue-950">
           <div className="p-5">
             <Kalender />
+          </div>
+        </PanelTilt>
+      </div>
+
+      {/* ========================================================= */}
+      {/* ====== SECTION BAWAH (biar gak keliatan kosong) ====== */}
+      {/* ========================================================= */}
+
+      {/* ===== Transaksi Terbaru + Distribusi Aset ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+
+        {/* Transaksi Terbaru (2 kolom) */}
+        <PanelTilt className="lg:col-span-2" tepi="from-indigo-400 to-blue-600">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-blue-950 flex items-center gap-2">
+                <Receipt size={18} className="text-indigo-500" />
+                Transaksi Terbaru
+              </h3>
+              <button className="text-xs font-semibold text-indigo-600 hover:text-indigo-800 inline-flex items-center gap-1">
+                Lihat Semua <ChevronRight size={14} />
+              </button>
+            </div>
+
+            <div className="space-y-2">
+              {[
+                { ikon: Coins,             bg: 'bg-amber-50',   warna: 'text-amber-600',   judul: 'Emas',          sub: 'Belum ada transaksi', jumlah: 'Rp -', naik: true },
+                { ikon: TrendingUp,        bg: 'bg-sky-50',     warna: 'text-sky-600',     judul: 'Saham',         sub: 'Belum ada transaksi', jumlah: 'Rp -', naik: true },
+                { ikon: Landmark,          bg: 'bg-purple-50',  warna: 'text-purple-600',  judul: 'Reksa Dana',    sub: 'Belum ada transaksi', jumlah: 'Rp -', naik: true },
+                { ikon: CircleDollarSign,  bg: 'bg-emerald-50', warna: 'text-emerald-600', judul: 'Tabungan',      sub: 'Belum ada transaksi', jumlah: 'Rp -', naik: false },
+              ].map((t, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-3 p-3 rounded-xl bg-slate-50 hover:bg-slate-100 transition border border-slate-100"
+                >
+                  <div className={`grid place-items-center w-10 h-10 rounded-xl ${t.bg}`}>
+                    <t.ikon size={18} className={t.warna} />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-slate-700">{t.judul}</p>
+                    <p className="text-xs text-slate-500 truncate">{t.sub}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className={`text-sm font-bold ${t.naik ? 'text-emerald-600' : 'text-rose-600'}`}>
+                      {t.jumlah}
+                    </p>
+                    <p className="text-[10px] text-slate-400 flex items-center gap-0.5 justify-end">
+                      {t.naik ? <ArrowUpRight size={10} /> : <ArrowDownRight size={10} />}
+                      -
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-400 italic mt-4 pt-4 border-t border-slate-100">
+              <Inbox size={14} />
+              Belum ada transaksi tercatat
+            </div>
+          </div>
+        </PanelTilt>
+
+        {/* Distribusi Aset */}
+        <PanelTilt tepi="from-emerald-400 to-teal-600">
+          <div className="p-5">
+            <h3 className="font-bold text-blue-950 flex items-center gap-2 mb-4">
+              <Sparkles size={18} className="text-emerald-500" />
+              Distribusi Aset
+            </h3>
+
+            <div className="space-y-3">
+              {[
+                { label: 'Emas',       warna: 'bg-amber-400',   val: 0 },
+                { label: 'Saham',      warna: 'bg-sky-400',     val: 0 },
+                { label: 'Reksa Dana', warna: 'bg-purple-400',  val: 0 },
+                { label: 'Tabungan',   warna: 'bg-emerald-400', val: 0 },
+              ].map((a) => (
+                <div key={a.label}>
+                  <div className="flex justify-between items-center text-xs mb-1">
+                    <span className="font-medium text-slate-700">{a.label}</span>
+                    <span className="font-semibold text-slate-500">{a.val}%</span>
+                  </div>
+                  <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
+                    <div className={`h-full ${a.warna} rounded-full transition-all`} style={{ width: `${a.val}%` }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-5 pt-4 border-t border-slate-100">
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs font-semibold text-slate-600">Total Aset</span>
+                <span className="text-sm font-black text-emerald-600">Rp -</span>
+              </div>
+              <p className="text-[10px] text-slate-400">Diperbarui: -</p>
+            </div>
+          </div>
+        </PanelTilt>
+      </div>
+
+      {/* ===== Target Bulanan + Aksi Cepat ===== */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+        {/* Target Bulanan (2 kolom) */}
+        <PanelTilt className="lg:col-span-2" tepi="from-amber-400 to-orange-500">
+          <div className="p-5">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="font-bold text-blue-950 flex items-center gap-2">
+                <Target size={18} className="text-amber-500" />
+                Target Bulan Ini
+              </h3>
+              <span className="text-xs text-slate-500 flex items-center gap-1">
+                <CalendarDays size={12} /> -
+              </span>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+              {[
+                { label: 'Target Pemasukan',   target: 'Rp -', capai: 0, warna: 'from-emerald-400 to-teal-500',  teks: 'text-emerald-600' },
+                { label: 'Target Tabungan',    target: 'Rp -', capai: 0, warna: 'from-sky-400 to-blue-500',      teks: 'text-sky-600' },
+                { label: 'Target Investasi',   target: 'Rp -', capai: 0, warna: 'from-purple-400 to-fuchsia-500',teks: 'text-purple-600' },
+              ].map((t) => (
+                <div key={t.label} className="rounded-xl p-4 bg-slate-50 border border-slate-100">
+                  <p className="text-xs text-slate-500 mb-1">{t.label}</p>
+                  <p className={`text-lg font-black ${t.teks} mb-2`}>{t.target}</p>
+                  <div className="h-2 rounded-full bg-slate-200 overflow-hidden mb-1">
+                    <div className={`h-full bg-gradient-to-r ${t.warna} rounded-full`} style={{ width: `${t.capai}%` }} />
+                  </div>
+                  <p className="text-[10px] text-slate-400 text-right">{t.capai}% tercapai</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="flex items-center justify-center gap-2 text-xs text-slate-400 italic mt-4 pt-4 border-t border-slate-100">
+              <Target size={14} />
+              Belum ada target yang ditetapkan
+            </div>
+          </div>
+        </PanelTilt>
+
+        {/* Aksi Cepat */}
+        <PanelTilt tepi="from-pink-400 to-rose-500">
+          <div className="p-5">
+            <h3 className="font-bold text-blue-950 flex items-center gap-2 mb-4">
+              <Sparkles size={18} className="text-pink-500" />
+              Aksi Cepat
+            </h3>
+
+            <div className="space-y-2">
+              {[
+                { ikon: Plus,              label: 'Tambah Transaksi',  warna: 'from-emerald-400 to-teal-500',  shadow: '0 3px 0 #0d9488' },
+                { ikon: PiggyBank,         label: 'Catat Tabungan',    warna: 'from-sky-400 to-blue-500',      shadow: '0 3px 0 #1d4ed8' },
+                { ikon: Target,            label: 'Buat Target Baru',  warna: 'from-amber-400 to-orange-500',  shadow: '0 3px 0 #c2410c' },
+                { ikon: Receipt,           label: 'Lihat Laporan',     warna: 'from-purple-400 to-fuchsia-500',shadow: '0 3px 0 #a21caf' },
+              ].map((a, i) => (
+                <button
+                  key={i}
+                  className={`w-full inline-flex items-center gap-3 bg-gradient-to-br ${a.warna} text-white text-sm font-semibold px-4 py-2.5 rounded-xl transition hover:brightness-110 active:translate-y-0.5`}
+                  style={{ boxShadow: `inset 0 1px 0 rgba(255,255,255,.5), ${a.shadow}` }}
+                >
+                  <a.ikon size={16} />
+                  <span className="flex-1 text-left">{a.label}</span>
+                  <ArrowRight size={14} />
+                </button>
+              ))}
+            </div>
           </div>
         </PanelTilt>
       </div>
@@ -155,7 +338,7 @@ function JamRealtime() {
 }
 
 /* ============================================================ */
-/* Komponen: Panel 3D (pembungkus grafik & kalender)             */
+/* Komponen: Panel 3D (pembungkus)                               */
 /* ============================================================ */
 function PanelTilt({ children, className = '', tepi }) {
   const { handlers, style, glare } = useTilt(3, 6);
@@ -196,7 +379,6 @@ function KartuRingkas({ label, warna, glow, turun = false, ikon }) {
         }}
         className={`tilt-3d relative overflow-hidden rounded-xl p-4 bg-gradient-to-br ${warna} text-slate-800 flex justify-between items-center`}
       >
-        {/* lingkaran dekoratif (lebih lembut) */}
         <span className="absolute -right-6 -top-8 w-28 h-28 rounded-full bg-white/50" />
         <span className="absolute -right-2 -bottom-10 w-24 h-24 rounded-full bg-white/30" />
 
