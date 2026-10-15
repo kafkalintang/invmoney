@@ -15,12 +15,9 @@ import {
   ArrowLeft,
   ArrowRight,
   Download,
-  Calendar,
   Receipt,
   ClipboardList,
   Gem,
-  Banknote,
-  Star,
   CircleDollarSign,
   ScrollText,
 } from 'lucide-react';
@@ -93,7 +90,7 @@ export default function HalamanLaporan() {
               bg="from-amber-100 via-yellow-100 to-orange-200"
               teks="text-amber-900"
               glow="251,191,36"
-              isi={['Total Gram : 10.5 gram', 'Investasi: Rp 10.500.000,-', 'Nilai: Rp 12.600.000,- (+20%)']}
+              isi={['Total Gram : -', 'Investasi: -', 'Nilai: -']}
               onClick={() => setTampilan('emas')}
             />
             <KartuAset
@@ -102,7 +99,7 @@ export default function HalamanLaporan() {
               bg="from-sky-100 via-cyan-100 to-blue-200"
               teks="text-blue-900"
               glow="56,189,248"
-              isi={['Total Lot : 3 Lot ( 300 lembar )', 'Investasi : Rp 2.550.000,-', 'Nilai: Rp 2.700.000,- (+5.88%)']}
+              isi={['Total Lot : -', 'Investasi : -', 'Nilai: -']}
               onClick={() => setTampilan('saham')}
             />
             <KartuAset
@@ -111,7 +108,7 @@ export default function HalamanLaporan() {
               bg="from-purple-100 via-fuchsia-100 to-pink-200"
               teks="text-purple-900"
               glow="168,85,247"
-              isi={['Total Unit : 1550 unit', 'Investasi : Rp 15.500.000,-', 'Nilai: Rp 16.275.000,- (+5%)']}
+              isi={['Total Unit : -', 'Investasi : -', 'Nilai: -']}
               onClick={() => setTampilan('reksadana')}
             />
             <KartuAset
@@ -120,7 +117,7 @@ export default function HalamanLaporan() {
               bg="from-emerald-100 via-teal-100 to-cyan-200"
               teks="text-emerald-900"
               glow="52,211,153"
-              isi={['Total Saldo : Rp 12.500.000,-', 'Bank : Rp 15.500.000,-', 'E-wallet : Rp 16.275.000']}
+              isi={['Total Saldo : -', 'Bank : -', 'E-wallet : -']}
               onClick={() => setTampilan('tabungan')}
             />
           </div>
@@ -134,13 +131,13 @@ export default function HalamanLaporan() {
                 <Gem size={22} className="text-emerald-600" />
                 <h3 className="text-2xl font-bold text-emerald-800">Total Aset</h3>
               </div>
-              <p className="text-sm text-emerald-700 mb-4">Total Kekayaan: Rp 44.075.000</p>
+              <p className="text-sm text-emerald-700 mb-4">Total Kekayaan: -</p>
 
               <div className="bg-white/70 backdrop-blur rounded-xl p-3 text-xs space-y-1.5 text-slate-700">
-                <p className="flex items-center gap-2"><Coins size={14} className="text-amber-500" /> Emas &nbsp;&nbsp;&nbsp;&nbsp;: Rp 12.600.000</p>
-                <p className="flex items-center gap-2"><TrendingUp size={14} className="text-sky-500" /> Saham &nbsp;&nbsp;&nbsp;: Rp 2.700.000</p>
-                <p className="flex items-center gap-2"><Landmark size={14} className="text-purple-500" /> Reksa &nbsp;&nbsp;&nbsp;: Rp 16.275.000</p>
-                <p className="flex items-center gap-2"><PiggyBank size={14} className="text-emerald-500" /> Tabungan : Rp 12.500.000</p>
+                <p className="flex items-center gap-2"><Coins size={14} className="text-amber-500" /> Emas &nbsp;&nbsp;&nbsp;&nbsp;: -</p>
+                <p className="flex items-center gap-2"><TrendingUp size={14} className="text-sky-500" /> Saham &nbsp;&nbsp;&nbsp;: -</p>
+                <p className="flex items-center gap-2"><Landmark size={14} className="text-purple-500" /> Reksa &nbsp;&nbsp;&nbsp;: -</p>
+                <p className="flex items-center gap-2"><PiggyBank size={14} className="text-emerald-500" /> Tabungan : -</p>
               </div>
 
               <button
@@ -205,11 +202,12 @@ export default function HalamanLaporan() {
                   </thead>
                   <tbody>
                     <tr>
-                      <td className="p-1.5 text-slate-700">Maret</td>
-                      <td className="p-1.5 text-center text-slate-400">-</td>
-                      <td className="p-1.5 text-center text-slate-400">-</td>
-                      <td className="p-1.5 text-center text-slate-400">-</td>
-                      <td className="p-1.5 text-center text-slate-400">-</td>
+                      <td colSpan={5} className="py-6">
+                        <div className="flex flex-col items-center gap-1 text-slate-300 italic">
+                          <ClipboardList size={22} />
+                          Belum ada data
+                        </div>
+                      </td>
                     </tr>
                   </tbody>
                 </table>
