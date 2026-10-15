@@ -7,7 +7,7 @@ import {
   TrendingUp,
   Coins,
   Landmark,
-  PiggyBank,
+  CircleDollarSign,
   BarChart3,
   Wallet,
   StickyNote,
@@ -18,10 +18,22 @@ const menu = [
   { label: 'Saham',       href: '/saham',      icon: TrendingUp },
   { label: 'Emas',        href: '/emas',       icon: Coins },
   { label: 'Reksa Dana',  href: '/reksadana',  icon: Landmark },
-  { label: 'Tabungan',    href: '/tabungan',   icon: PiggyBank },
+  { label: 'Tabungan',    href: '/tabungan',   icon: CircleDollarSign },
   { label: 'Laporan',     href: '/laporan',    icon: BarChart3 },
   { label: 'Multi-bank',  href: '/multibank',  icon: Wallet },
   { label: 'Catatan',     href: '/catatan',    icon: StickyNote },
+];
+
+// ===== Warna per huruf "InvMoney" =====
+const hurufLogo = [
+  { char: 'I', warna: '#ffffff' },
+  { char: 'n', warna: '#bfdbfe' },
+  { char: 'v', warna: '#93c5fd' },
+  { char: 'M', warna: '#60a5fa' },
+  { char: 'o', warna: '#38bdf8' },
+  { char: 'n', warna: '#22d3ee' },
+  { char: 'e', warna: '#67e8f9' },
+  { char: 'y', warna: '#a5f3fc' },
 ];
 
 export default function Sidebar() {
@@ -34,29 +46,25 @@ export default function Sidebar() {
         background: 'linear-gradient(180deg, #1e3a8a 0%, #1e40af 35%, #0f172a 100%)',
       }}
     >
-      {/* ===== Efek glow di belakang logo ===== */}
-      <div
-        className="absolute top-0 left-0 w-full h-40 pointer-events-none"
+      {/* ===== Logo InvMoney (center, warna per huruf + kilau tipis) ===== */}
+      <h1
+        className="relative text-3xl font-black mb-10 tracking-tight text-center"
         style={{
-          background:
-            'radial-gradient(ellipse at 50% 0%, rgba(96,165,250,.55), transparent 70%)',
+          filter:
+            'drop-shadow(0 0 3px rgba(255,255,255,.35)) drop-shadow(0 0 6px rgba(147,197,253,.25))',
         }}
-      />
-
-      {/* ===== Logo InvMoney bersinar ===== */}
-      <h1 className="relative text-3xl font-black mb-10 tracking-tight">
-        <span
-          className="bg-clip-text text-transparent"
-          style={{
-            backgroundImage:
-              'linear-gradient(90deg, #ffffff 0%, #bfdbfe 40%, #ffffff 60%, #dbeafe 100%)',
-            filter: 'drop-shadow(0 0 12px rgba(147,197,253,.9)) drop-shadow(0 0 24px rgba(59,130,246,.6))',
-            backgroundSize: '200% auto',
-            animation: 'shine 3s linear infinite',
-          }}
-        >
-          InvMoney
-        </span>
+      >
+        {hurufLogo.map((h, i) => (
+          <span
+            key={i}
+            style={{
+              color: h.warna,
+              textShadow: '0 0 2px rgba(255,255,255,.35)',
+            }}
+          >
+            {h.char}
+          </span>
+        ))}
       </h1>
 
       {/* ===== Menu ===== */}
@@ -81,7 +89,6 @@ export default function Sidebar() {
               />
               <span>{label}</span>
 
-              {/* Titik kecil di kanan kalau aktif */}
               {aktif && (
                 <span className="ml-auto w-2 h-2 rounded-full bg-blue-600" />
               )}
@@ -89,14 +96,6 @@ export default function Sidebar() {
           );
         })}
       </nav>
-
-      {/* ===== Animasi shine (dipasang via style tag) ===== */}
-      <style jsx global>{`
-        @keyframes shine {
-          0% { background-position: 0% center; }
-          100% { background-position: 200% center; }
-        }
-      `}</style>
     </aside>
   );
 }
